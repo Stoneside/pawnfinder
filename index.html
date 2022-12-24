@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pawn Utility</title>
+        <link rel='shortcut icon' href='images/favicon/favicon.ico' />
+        <link rel="stylesheet" type="text/css" href="r/styles/style.css"/>
+        <link rel="stylesheet" type="text/css" href="r/styles/datatables.min.css"/>
+ 
+
+        <script src="r/scripts/jquery-3.5.0.js" ></script>
+        <script src="r/scripts/datatables.min.js"></script>
+        <script src="r/scripts/natural.js"></script>
+        <script src="r/scripts/jscript.js" ></script>
+    </head> 
+    <script>
+    	$(document).ready(function() {
+
+    		$('#example thead tr').clone(true).appendTo( '#example thead' );
+    		$('#example thead tr:eq(1) th').each( function (i) {
+    			var title = $(this).text();
+    			$(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+
+    			$( 'input', this ).on( 'keyup change', function () {
+    				if ($('#example').DataTable().column(i).search() !== this.value ) {
+    					$('#example').DataTable().column(i).search( this.value ).draw();   				
+    				}
+    			} );
+    		} );
+ 
+		    $('#example').DataTable( {
+		        "data": data,
+		        "scrollY": 600,
+   				"paging": false,
+   				"order": [[ 3, "asc" ]],
+   				columnDefs: [
+			       { type: 'natural', targets: 3 }
+			     ],
+			     orderCellsTop: true,
+        		 fixedHeader: true,
+		        "columns": [
+		        	{			        
+			            "data": "Index",
+						"render" : function ( data, type, full) {
+							return '<img height="45%" class="enlarge" src="./r/pawn_pic/'+data+'.jpg" onerror="this.src=\'./r/pawn_pic/d.jpg\';"/>';
+						}
+		        	},
+		            { "data": "Name"},		      
+		            { "data": "Source" },		        
+		            { "data": "Index", "type": 'natural' },
+		            { "data": "Size" },
+		            { "data": "Type" },
+		            { "data": "Sub-Type" },
+		            { "data": "Alignment" }
+		            
+		        ],
+		        "initComplete": function( settings ) {
+			        $('.enlarge').on("mouseenter", function(e) {
+			        	var src = $(this).attr('src');
+			        	var img = '<img height="45%" class="enlarge" src="'+src+'" onerror="this.src=\'./r/pawn_pic/d.jpg\';"/>';
+						$('#img_m').append(img);
+			        	
+			        	var mod = ($('#img_m').height() - $(this).height())/2;
+						var top = $(this).offset().top - mod ;
+						var right = ($(this).offset().left + $(this).width());
+
+						
+			        	$('#img_m').css({'top': top + 'px','left': right + 'px'});
+			        	$("#img_m").show();
+					}).off("mouseout").on("mouseout", function(e) {
+			        	$("#img_m").hide();
+			        	$('#img_m').empty();			        	 
+					});
+			    }
+		    } );		
+     } );
+    </script>
+    <body>
+        <div class="header" >
+            <H1>Find My Pawn</H1>
+        </div>	
+        <div class="content" >
+          	<table id="example" class="display" style="width:100%">
+		        <thead>
+		            <tr>
+		            	<th>Image</th>
+		                <th>Name</th>
+		                <th>Source</th>
+		                <th>Index</th>
+		                <th>Size</th>
+		                <th>Type</th>
+		                <th>Sub-Type</th>
+		                <th>Alignment</th>	           
+		            </tr>
+		        </thead>
+		        <tfoot>
+		            <tr>
+		            	<th>Image</th>
+		                <th>Name</th>		                
+		                <th>Source</th>
+		                <th>Index</th>
+		                <th>Size</th>
+		                <th>Type</th>
+		                <th>Sub-Type</th>
+		                <th>Alignment</th>	               
+		            </tr>
+	        </tfoot>
+	    	</table>
+        </div>	   
+
+        <div class="footer" >
+            update 11.27.2013.a3			
+        </div>
+
+        <div id="img_m">
+        </div>
+    </body>
+</html> 
